@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Query Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <p class="eyebrow">Computer Networks Project</p>
+            <h1>DNS Query Analyzer</h1>
+            <p class="subtitle">
+                Analyze DNS records of any domain using real DNS lookups.
+                Enter a domain name to view A, AAAA, MX, NS, CNAME, and TXT records.
+            </p>
+        </header>
+
+        <main>
+            <section class="panel search-panel" aria-labelledby="search-heading">
+                <h2 id="search-heading" class="visually-hidden">Domain lookup</h2>
+                <form id="dns-form" novalidate>
+                    <label for="domain-input">Enter domain</label>
+                    <div class="search-row">
+                        <input
+                            id="domain-input"
+                            name="domain"
+                            type="text"
+                            placeholder="google.com"
+                            autocomplete="off"
+                            spellcheck="false"
+                            maxlength="253"
+                        >
+                        <button id="analyze-btn" type="submit">Analyze DNS</button>
+                    </div>
+                    <p class="hint">Examples: google.com, github.com, example.com</p>
+                </form>
+            </section>
+
+            <section id="loading" class="panel loading-panel hidden" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <p>Analyzing DNS records and comparing resolvers...</p>
+            </section>
+
+            <section id="error-box" class="panel error-panel hidden" role="alert">
+                <h2 id="error-title">DNS Query Failed</h2>
+                <p id="error-message">The domain could not be resolved. Please check the domain name and try again.</p>
+            </section>
+
+            <section id="results" class="hidden">
+                <div class="panel overview-panel">
+                    <div class="overview-grid">
+                        <div>
+                            <span class="label">Domain</span>
+                            <strong id="result-domain">-</strong>
+                        </div>
+                        <div>
+                            <span class="label">Status</span>
+                            <strong id="result-status" class="status-ok">-</strong>
+                        </div>
+                        <div>
+                            <span class="label">Response Time</span>
+                            <strong id="result-time">-</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="panel summary-panel" aria-labelledby="summary-heading">
+                    <h2 id="summary-heading">DNS Analysis Summary</h2>
+                    <div class="summary-stats">
+                        <div>
+                            <span class="label">Query Status</span>
+                            <strong id="summary-status" class="status-ok">Successful</strong>
+                        </div>
+                        <div>
+                            <span class="label">Response Time</span>
+                            <strong id="summary-time">-</strong>
+                        </div>
+                        <div>
+                            <span class="label">Record Types Found</span>
+                            <strong id="summary-types">-</strong>
+                        </div>
+                        <div>
+                            <span class="label">Total Records</span>
+                            <strong id="summary-total">-</strong>
+                        </div>
+                    </div>
+                    <h3 class="subheading">Record Availability</h3>
+                    <ul id="availability-list" class="availability-list"></ul>
+                    <p id="summary-interpretation" class="interpretation"></p>
+                    <p class="note">
+                        Response time is measured by this application for the DNS lookup process.
+                        It can vary depending on network conditions and DNS resolver behavior.
+                    </p>
+                </section>
+
+                <section class="panel comparison-panel" aria-labelledby="comparison-heading">
+                    <h2 id="comparison-heading">DNS Server Comparison</h2>
+                    <p class="comparison-intro">
+                        Real A-record lookups against Google DNS (8.8.8.8), Cloudflare DNS (1.1.1.1),
+                        and this computer's System DNS.
+                    </p>
+                    <div id="comparison-rows" class="comparison-rows"></div>
+                    <p id="comparison-fastest" class="fastest-line"></p>
+                    <p id="comparison-note" class="note"></p>
+                </section>
+
+                <section id="record-cards" class="record-grid" aria-label="DNS records"></section>
+            </section>
+        </main>
+
+        <footer>
+            <p>Academic project for Computer Networks | Real DNS queries using Python and dnspython</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
